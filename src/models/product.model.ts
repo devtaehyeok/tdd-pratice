@@ -1,6 +1,6 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
 
-class ProductClass {
+export class ProductClass {
   @prop({ required: true })
   public name!: string;
   @prop({ required: true })
@@ -8,5 +8,4 @@ class ProductClass {
   @prop({ default: 0 })
   public price!: number;
 }
-
 export const Product = getModelForClass(ProductClass);
