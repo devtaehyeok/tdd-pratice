@@ -1,16 +1,13 @@
-import { BeAnObject, ReturnModelType } from '@typegoose/typegoose/lib/types';
 import express from 'express';
-import { Product, ProductClass } from '../models';
+import { ProductClass, ProductModel } from '../models';
 export class ProductController {
-  constructor(private productRepositorty: ReturnModelType<any, BeAnObject>) {}
-
-  public async createProduct(
+  public static async createProduct(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction | null
   ) {
     try {
-      const createdProduct = (await new this.productRepositorty.create(
+      const createdProduct = (await ProductModel.create(
         req.body
       )) as ProductClass;
       return res.status(201).json(createdProduct);
@@ -19,5 +16,3 @@ export class ProductController {
     }
   }
 }
-
-export const productController = new ProductController(Product);

@@ -1,9 +1,6 @@
 import express from 'express';
+import { ProductController } from '../controller';
 
 const productRoutes = express.Router();
-
-productRoutes.get('/', (req, res) => {
-  res.json('My Products');
-});
-
+productRoutes.post('/', ProductController.createProduct);
 export { productRoutes };

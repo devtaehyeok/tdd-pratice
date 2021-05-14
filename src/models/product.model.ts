@@ -8,4 +8,4 @@ export class ProductClass {
   @prop({ default: 0 })
   public price!: number;
 }
-export const Product = getModelForClass(ProductClass);
+export const ProductModel = getModelForClass(ProductClass);
