@@ -43,4 +43,40 @@ export class ProductController {
       next && next(error);
     }
   }
+  public static async updateProduct(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction | null
+  ) {
+    try {
+      const updatedProduct = await ProductModel.findByIdAndUpdate(
+        req.params.productId,
+        req.body,
+        { new: true }
+      );
+      if (updatedProduct) {
+        return res.status(200).json(updatedProduct);
+      }
+      return res.status(404).send();
+    } catch (error) {
+      next && next(error);
+    }
+  }
+  public static async deleteProduct(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction | null
+  ) {
+    try {
+      const deletedProduct = await ProductModel.findByIdAndDelete(
+        req.params.productId
+      );
+      if (deletedProduct) {
+        return res.status(200).json(deletedProduct);
+      }
+      return res.status(404).send();
+    } catch (error) {
+      next && next(error);
+    }
+  }
 }

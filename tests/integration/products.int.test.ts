@@ -1,8 +1,19 @@
 import request from 'supertest';
 import { app } from '../../server';
+import { ProductClass } from '../../src/models';
 import { default as newProduct } from '../data/new-product.json';
 jest.setTimeout(10000);
-
+const updatedProduct: ProductClass = {
+  name: 'updatedName',
+  description: 'updatedDescription',
+  price: 10000,
+};
+const deletedProduct: ProductClass = {
+  name: 'updatedName',
+  description: 'updatedDescription',
+  price: 10000,
+};
+const notExistingOid = '/api/products/609e4472d724e3cc4d1d9758';
 let firstProduct: any;
 test('POST /api/products', async () => {
   const response = await request(app)
@@ -45,9 +56,40 @@ test('GET /api/products/:productId', async () => {
 });
 
 test('GET id doesnt exist /api/products/:productId', async () => {
-  const response = await request(app).get(
-    `/api/products/609e4472d724e3cc4d1d9758`
-  );
+  const response = await request(app).get(`/api/products/${notExistingOid}`);
   expect(response.statusCode).toBe(404);
-  console.log(response.body);
+});
+
+test('PUT /api/products', async () => {
+  const response = await request(app)
+    .put(`/api/products/${firstProduct._id}`)
+    .send(updatedProduct);
+  expect(response.statusCode).toBe(200);
+  expect(response.body.name).toBe(updatedProduct.name);
+  expect(response.body.description).toBe(updatedProduct.description);
+  expect(response.body.price).toBe(updatedProduct.price);
+});
+test('should return 404 on PUT /api/products', async () => {
+  const response = await request(app)
+    .put(`/api/products/${notExistingOid}`)
+    .send(updatedProduct);
+  expect(response.statusCode).toBe(404);
+});
+
+test('DELETE /api/products', async () => {
+  const response = await request(app)
+    .delete(`/api/products/${firstProduct._id}`)
+    .send();
+
+  expect(response.statusCode).toBe(200);
+  expect(response.body.name).toBe(deletedProduct.name);
+  expect(response.body.description).toBe(deletedProduct.description);
+  expect(response.body.price).toBe(deletedProduct.price);
+});
+test('should return 404 on DELETE /api/products', async () => {
+  const response = await request(app)
+    .delete(`/api/products/${notExistingOid}`)
+    .send();
+
+  expect(response.statusCode).toBe(404);
 });
